@@ -12,7 +12,7 @@ import "ace-builds/src-noconflict/theme-solarized_light";
 import "ace-builds/src-noconflict/theme-terminal";
 
 // Import Ace
-import 'ace-builds/src-noconflict/ace';
+import "ace-builds/src-noconflict/ace";
 
 // Import all modes
 import "ace-builds/src-noconflict/mode-javascript";
@@ -35,7 +35,7 @@ export * from "ace-builds/src-noconflict/theme-textmate";
 export * from "ace-builds/src-noconflict/theme-solarized_dark";
 export * from "ace-builds/src-noconflict/theme-solarized_light";
 export * from "ace-builds/src-noconflict/theme-terminal";
-export * from 'ace-builds/src-noconflict/ace';
+export * from "ace-builds/src-noconflict/ace";
 export * from "ace-builds/src-noconflict/mode-javascript";
 export * from "ace-builds/src-noconflict/mode-c_cpp";
 export * from "ace-builds/src-noconflict/mode-java";

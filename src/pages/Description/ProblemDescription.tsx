@@ -6,8 +6,10 @@ import rehypeRaw from "rehype-raw";
 import "../../imports/AceBuildImports";
 import DOMPurify from "dompurify";
 
-import Languages from "../../constants/Languages";
+import Languages, { languageMappings } from "../../constants/Languages";
+
 import Themes from "../../constants/Themes";
+import { SUBMISSIONS_API } from "../../configs/ServerConfig";
 
 type languageSupport = {
   languageName: string;
@@ -32,17 +34,13 @@ function Description({ descriptionText }: { descriptionText: string }) {
 
   async function handleSubmission() {
     try {
-      console.log(code);
-      console.log(language);
-      const response = await axios.post(
-        "http://localhost:3000/api/v1/submissions",
-        {
-          code,
-          language,
-          userId: "1",
-          problemId: "6671b5e86f909d206b2d40a4",
-        }
-      );
+      const response = await axios.post(SUBMISSIONS_API, {
+        code,
+        language: languageMappings[language],
+        userId: "__EMPTY__",
+        problemId: "66ad1268f556d80850f96157",
+        testCases: ["5", "5", "3", "1", "2", "7"],
+      });
       console.log(response);
       return response;
     } catch (error) {
@@ -119,19 +117,16 @@ function Description({ descriptionText }: { descriptionText: string }) {
             Submissions
           </a>
         </div>
-
         <div className="markdownViewer p-[20px] basis-1/2">
           <ReactMarkdown rehypePlugins={[rehypeRaw]} className="prose">
             {sanitizedMarkdown}
           </ReactMarkdown>
         </div>
       </div>
-
       <div
         className="divider cursor-col-resize w-[5px] bg-slate-200 h-full"
         onMouseDown={startDragging}
       ></div>
-
       <div
         className="rightPanel h-full overflow-auto flex flex-col"
         style={{ width: `${100 - leftWidth}%` }}
@@ -156,8 +151,7 @@ function Description({ descriptionText }: { descriptionText: string }) {
             >
               {Languages.map((language: languageSupport) => (
                 <option key={language.value} value={language.value}>
-                  {" "}
-                  {language.languageName}{" "}
+                  {language.languageName}
                 </option>
               ))}
             </select>
@@ -170,14 +164,12 @@ function Description({ descriptionText }: { descriptionText: string }) {
             >
               {Themes.map((theme: themeStyle) => (
                 <option key={theme.value} value={theme.value}>
-                  {" "}
-                  {theme.themeName}{" "}
+                  {theme.themeName}
                 </option>
               ))}
             </select>
           </div>
         </div>
-
         <div className="flex flex-col editor-console grow-[1] ">
           <div className="editorContainer grow-[1]">
             <AceEditor
@@ -197,9 +189,6 @@ function Description({ descriptionText }: { descriptionText: string }) {
               height="100%"
             />
           </div>
-
-          {/* Collapsable test case part */}
-
           <div className="collapse bg-base-200 rounded-none">
             <input type="checkbox" className="peer" />
             <div className="collapse-title bg-primary text-primary-content peer-checked:bg-secondary peer-checked:text-secondary-content">
@@ -222,7 +211,6 @@ function Description({ descriptionText }: { descriptionText: string }) {
                   Output
                 </a>
               </div>
-
               {testCaseTab === "input" ? (
                 <textarea
                   rows={4}

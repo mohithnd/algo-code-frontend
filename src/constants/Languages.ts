@@ -1,6 +1,6 @@
 export default [
   {
-    languageName: "CPP",
+    languageName: "C++",
     value: "c_cpp",
   },
   {
@@ -8,7 +8,7 @@ export default [
     value: "java",
   },
   {
-    languageName: "Javascript",
+    languageName: "JavaScript",
     value: "javascript",
   },
   {
@@ -16,3 +16,14 @@ export default [
     value: "python",
   },
 ];
+
+type LanguageMapping = {
+  [key: string]: string;
+};
+
+export const languageMappings: LanguageMapping = {
+  c_cpp: "CPP",
+  python: "PYTHON",
+  java: "JAVA",
+  javascript: "NODEJS",
+};

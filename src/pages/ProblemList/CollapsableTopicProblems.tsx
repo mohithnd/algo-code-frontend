@@ -28,8 +28,7 @@ function CollapsableTopicProblem({
             href={problem.url}
             target="_blank"
           >
-            {" "}
-            {problem.title}{" "}
+            {problem.title}
           </a>
         ))}
       </div>

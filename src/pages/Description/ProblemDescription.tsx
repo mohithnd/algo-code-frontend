@@ -1,4 +1,4 @@
-import { useState, DragEvent } from "react";
+import { useState, DragEvent, useContext } from "react";
 import AceEditor from "react-ace";
 import axios from "axios";
 import ReactMarkdown from "react-markdown";
@@ -10,6 +10,7 @@ import Languages, { languageMappings } from "../../constants/Languages";
 
 import Themes from "../../constants/Themes";
 import { SUBMISSIONS_API } from "../../configs/ServerConfig";
+import { SocketContext } from "../../contexts/SocketContext";
 
 type languageSupport = {
   languageName: string;
@@ -31,16 +32,22 @@ function Description({ descriptionText }: { descriptionText: string }) {
   const [language, setLanguage] = useState("javascript");
   const [code, setCode] = useState("");
   const [theme, setTheme] = useState("monokai");
+  const [input, setInput] = useState("");
+  const [output] = useState("");
+
+  const { userId, problemId, response, setResponse } =
+    useContext(SocketContext);
 
   async function handleSubmission() {
     try {
       const response = await axios.post(SUBMISSIONS_API, {
         code,
         language: languageMappings[language],
-        userId: "__EMPTY__",
-        problemId: "66ad1268f556d80850f96157",
+        userId: userId,
+        problemId: problemId,
       });
       console.log(response);
+      setResponse("Pending");
       return response;
     } catch (error) {
       console.log(error);
@@ -194,31 +201,45 @@ function Description({ descriptionText }: { descriptionText: string }) {
               Console
             </div>
             <div className="collapse-content bg-primary text-primary-content peer-checked:bg-secondary peer-checked:text-secondary-content">
-              <div role="tablist" className="tabs tabs-boxed w-3/5 mb-4">
-                <a
-                  onClick={() => setTestCaseTab("input")}
-                  role="tab"
-                  className={isInputTabActive("input")}
-                >
-                  Input
-                </a>
-                <a
-                  onClick={() => setTestCaseTab("output")}
-                  role="tab"
-                  className={isInputTabActive("output")}
-                >
-                  Output
-                </a>
+              <div className="flex items-start">
+                <div className="w-1/2">
+                  <div role="tablist" className="tabs tabs-boxed w-3/5 mb-4">
+                    <a
+                      onClick={() => setTestCaseTab("input")}
+                      role="tab"
+                      className={isInputTabActive("input")}
+                    >
+                      Input
+                    </a>
+                    <a
+                      onClick={() => setTestCaseTab("output")}
+                      role="tab"
+                      className={isInputTabActive("output")}
+                    >
+                      Output
+                    </a>
+                  </div>
+                  {testCaseTab === "input" ? (
+                    <textarea
+                      className="bg-neutral text-white rounded-md resize-none p-2 w-full h-32"
+                      value={input}
+                      onChange={(e) => setInput(e.target.value)}
+                    />
+                  ) : (
+                    <textarea
+                      className="bg-neutral text-white rounded-md resize-none p-2 w-full h-32"
+                      value={output}
+                      readOnly
+                    />
+                  )}
+                </div>
+                <div className="w-1/2 pl-4">
+                  <h3 className="text-lg font-semibold mb-2">Response:</h3>
+                  <div className="bg-neutral text-white rounded-md p-2 min-h-[8rem] overflow-y-auto">
+                    {response}
+                  </div>
+                </div>
               </div>
-              {testCaseTab === "input" ? (
-                <textarea
-                  rows={4}
-                  cols={70}
-                  className="bg-neutral text-white rounded-md resize-none"
-                />
-              ) : (
-                <div className="w-12 h-8"></div>
-              )}
             </div>
           </div>
         </div>

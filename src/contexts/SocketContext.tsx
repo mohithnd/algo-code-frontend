@@ -1,17 +1,55 @@
-import React, { createContext, useEffect } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import { WS_SERVER } from "../configs/ServerConfig";
 import SocketIoClient from "socket.io-client";
 import IProps from "../types/IProps.types";
+import { v4 as UUIDV4 } from "uuid";
 
 export const SocketContext = createContext<any>(null);
 
 const socket = SocketIoClient(WS_SERVER);
 
 export const SocketProvider: React.FC<IProps> = ({ children }) => {
-  useEffect(() => {}, []);
+  const [userId, setUserId] = useState(UUIDV4());
+  const [problemId, setProblemId] = useState("66ad1268f556d80850f96157");
+  const [response, setResponse] = useState("");
+
+  socket.on("connect", () => {
+    console.log("Connected To The Server");
+  });
+
+  socket.on("submissionPayloadResponse", (data) => {
+    console.log("Received Submission Response:-");
+    console.log(data);
+    let result = data.status;
+    if (data.status == "Success") {
+      result = result + " - " + data.stdout;
+    } else {
+      result = result + " - " + data.stderr;
+    }
+    setResponse(result);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("Disconnected To The Server");
+  });
+
+  useEffect(() => {
+    console.log("Sending User Id Mapping Request In Backend");
+    socket.emit("setUserId", userId);
+  }, [userId]);
 
   return (
-    <SocketContext.Provider value={{ socket }}>
+    <SocketContext.Provider
+      value={{
+        socket,
+        userId,
+        setUserId,
+        problemId,
+        setProblemId,
+        response,
+        setResponse,
+      }}
+    >
       {children}
     </SocketContext.Provider>
   );

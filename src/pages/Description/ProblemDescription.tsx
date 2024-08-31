@@ -26,20 +26,18 @@ function Description({ descriptionText }: { descriptionText: string }) {
   const sanitizedMarkdown = DOMPurify.sanitize(descriptionText);
 
   const [activeTab, setActiveTab] = useState("statement");
-  const [testCaseTab, setTestCaseTab] = useState("input");
   const [leftWidth, setLeftWidth] = useState(50);
   const [isDragging, setIsDragging] = useState(false);
   const [language, setLanguage] = useState("javascript");
   const [code, setCode] = useState("");
   const [theme, setTheme] = useState("monokai");
-  const [input, setInput] = useState("");
-  const [output] = useState("");
 
   const { userId, problemId, response, setResponse } =
     useContext(SocketContext);
 
   async function handleSubmission() {
     try {
+      setResponse("Pending");
       const response = await axios.post(SUBMISSIONS_API, {
         code,
         language: languageMappings[language],
@@ -47,7 +45,6 @@ function Description({ descriptionText }: { descriptionText: string }) {
         problemId: problemId,
       });
       console.log(response);
-      setResponse("Pending");
       return response;
     } catch (error) {
       console.log(error);
@@ -76,14 +73,6 @@ function Description({ descriptionText }: { descriptionText: string }) {
 
   const isActiveTab = (tabName: string) => {
     if (activeTab === tabName) {
-      return "tab tab-active";
-    } else {
-      return "tab";
-    }
-  };
-
-  const isInputTabActive = (tabName: string) => {
-    if (testCaseTab === tabName) {
       return "tab tab-active";
     } else {
       return "tab";
@@ -176,8 +165,8 @@ function Description({ descriptionText }: { descriptionText: string }) {
             </select>
           </div>
         </div>
-        <div className="flex flex-col editor-console grow-[1] ">
-          <div className="editorContainer grow-[1]">
+        <div className="flex flex-col editor-console grow">
+          <div className="editorContainer flex-grow">
             <AceEditor
               mode={language}
               theme={theme}
@@ -195,51 +184,10 @@ function Description({ descriptionText }: { descriptionText: string }) {
               height="100%"
             />
           </div>
-          <div className="collapse bg-base-200 rounded-none">
-            <input type="checkbox" className="peer" />
-            <div className="collapse-title bg-primary text-primary-content peer-checked:bg-secondary peer-checked:text-secondary-content">
-              Console
-            </div>
-            <div className="collapse-content bg-primary text-primary-content peer-checked:bg-secondary peer-checked:text-secondary-content">
-              <div className="flex items-start">
-                <div className="w-1/2">
-                  <div role="tablist" className="tabs tabs-boxed w-3/5 mb-4">
-                    <a
-                      onClick={() => setTestCaseTab("input")}
-                      role="tab"
-                      className={isInputTabActive("input")}
-                    >
-                      Input
-                    </a>
-                    <a
-                      onClick={() => setTestCaseTab("output")}
-                      role="tab"
-                      className={isInputTabActive("output")}
-                    >
-                      Output
-                    </a>
-                  </div>
-                  {testCaseTab === "input" ? (
-                    <textarea
-                      className="bg-neutral text-white rounded-md resize-none p-2 w-full h-32"
-                      value={input}
-                      onChange={(e) => setInput(e.target.value)}
-                    />
-                  ) : (
-                    <textarea
-                      className="bg-neutral text-white rounded-md resize-none p-2 w-full h-32"
-                      value={output}
-                      readOnly
-                    />
-                  )}
-                </div>
-                <div className="w-1/2 pl-4">
-                  <h3 className="text-lg font-semibold mb-2">Response:</h3>
-                  <div className="bg-neutral text-white rounded-md p-2 min-h-[8rem] overflow-y-auto">
-                    {response}
-                  </div>
-                </div>
-              </div>
+          <div className="bg-base-200 p-4 rounded-md mt-2 max-h-[40vh] flex flex-col">
+            <h3 className="text-lg font-semibold mb-2">Result:</h3>
+            <div className="bg-neutral text-white rounded-md p-4 overflow-y-auto flex-grow">
+              {response}
             </div>
           </div>
         </div>

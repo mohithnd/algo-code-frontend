@@ -20,11 +20,11 @@ export const SocketProvider: React.FC<IProps> = ({ children }) => {
   socket.on("submissionPayloadResponse", (data) => {
     console.log("Received Submission Response:-");
     console.log(data);
-    let result = data.status;
+    let result;
     if (data.status == "Success") {
-      result = result + " - " + data.stdout;
+      result = data.stdout;
     } else {
-      result = result + " - " + data.stderr;
+      result = data.stderr;
     }
     setResponse(result);
   });

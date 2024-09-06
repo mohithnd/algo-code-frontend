@@ -39,6 +39,10 @@ function Description({
 
   async function handleSubmission() {
     try {
+      if (code == "") {
+        return;
+      }
+
       setResponse("Pending");
       const response = await axios.post(SUBMISSIONS_API, {
         code,

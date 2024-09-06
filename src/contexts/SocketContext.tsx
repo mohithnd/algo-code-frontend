@@ -4,6 +4,7 @@ import SocketIoClient from "socket.io-client";
 import IProps from "../types/IProps.types";
 import { v4 as UUIDV4 } from "uuid";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const SocketContext = createContext<any>(null);
 
 const socket = SocketIoClient(WS_SERVER);

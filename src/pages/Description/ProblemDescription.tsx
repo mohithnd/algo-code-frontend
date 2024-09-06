@@ -22,7 +22,9 @@ type themeStyle = {
   value: string;
 };
 
-function Description({ descriptionText }: { descriptionText: string }) {
+function Description({
+  descriptionText,
+}: Readonly<{ descriptionText: string }>) {
   const sanitizedMarkdown = DOMPurify.sanitize(descriptionText);
 
   const [activeTab, setActiveTab] = useState("statement");
@@ -90,27 +92,27 @@ function Description({ descriptionText }: { descriptionText: string }) {
         style={{ width: `${leftWidth}%` }}
       >
         <div role="tablist" className="tabs tabs-boxed w-3/5">
-          <a
+          <button
             onClick={() => setActiveTab("statement")}
             role="tab"
             className={isActiveTab("statement")}
           >
             Problem Statement
-          </a>
-          <a
+          </button>
+          <button
             onClick={() => setActiveTab("editorial")}
             role="tab"
             className={isActiveTab("editorial")}
           >
             Editorial
-          </a>
-          <a
+          </button>
+          <button
             onClick={() => setActiveTab("submissions")}
             role="tab"
             className={isActiveTab("submissions")}
           >
             Submissions
-          </a>
+          </button>
         </div>
         <div className="markdownViewer p-[20px] basis-1/2">
           <ReactMarkdown rehypePlugins={[rehypeRaw]} className="prose">

@@ -3,10 +3,10 @@ import { ProblemData } from "../../types/problem.types";
 function CollapsableTopicProblem({
   topicName,
   problems,
-}: {
+}: Readonly<{
   topicName: string;
   problems: ProblemData[];
-}) {
+}>) {
   return (
     <div className="collapse bg-stone-700 my-4 px-2">
       <input type="radio" name="my-accordion-1" />

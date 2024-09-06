@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useState, useMemo } from "react";
 import { WS_SERVER } from "../configs/ServerConfig";
 import SocketIoClient from "socket.io-client";
 import IProps from "../types/IProps.types";
@@ -38,19 +38,20 @@ export const SocketProvider: React.FC<IProps> = ({ children }) => {
     socket.emit("setUserId", userId);
   }, [userId]);
 
+  const value = useMemo(
+    () => ({
+      socket,
+      userId,
+      setUserId,
+      problemId,
+      setProblemId,
+      response,
+      setResponse,
+    }),
+    [userId, problemId, response]
+  );
+
   return (
-    <SocketContext.Provider
-      value={{
-        socket,
-        userId,
-        setUserId,
-        problemId,
-        setProblemId,
-        response,
-        setResponse,
-      }}
-    >
-      {children}
-    </SocketContext.Provider>
+    <SocketContext.Provider value={value}>{children}</SocketContext.Provider>
   );
 };

@@ -1,4 +1,5 @@
 function SideBar() {
+  console.log("SideBar rendered");
   return (
     <div className="drawer z-10">
       <input id="sidebar-drawer" type="checkbox" className="drawer-toggle" />
@@ -7,6 +8,7 @@ function SideBar() {
           htmlFor="sidebar-drawer"
           aria-label="close sidebar"
           className="drawer-overlay"
+          onClick={() => console.log("Sidebar closed")}
         ></label>
         <ul className="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
           <li>

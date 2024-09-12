@@ -7,6 +7,7 @@ function CollapsableTopicProblem({
   topicName: string;
   problems: ProblemData[];
 }>) {
+  console.log(`CollapsableTopicProblem rendered for topic: ${topicName}`);
   return (
     <div className="collapse bg-stone-700 my-4 px-2">
       <input type="radio" name="my-accordion-1" />
@@ -21,16 +22,19 @@ function CollapsableTopicProblem({
         </div>
       </div>
       <div className="collapse-content">
-        {problems.map((problem: ProblemData) => (
-          <a
-            className="block"
-            key={problem.url}
-            href={problem.url}
-            target="_blank"
-          >
-            {problem.title}
-          </a>
-        ))}
+        {problems.map((problem: ProblemData) => {
+          console.log(`Rendering problem: ${problem.title}`);
+          return (
+            <a
+              className="block"
+              key={problem.url}
+              href={problem.url}
+              target="_blank"
+            >
+              {problem.title}
+            </a>
+          );
+        })}
       </div>
     </div>
   );

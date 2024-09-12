@@ -38,8 +38,10 @@ function Description({
     useContext(SocketContext);
 
   async function handleSubmission() {
+    console.log("Submission initiated with language:", language);
     try {
-      if (code == "") {
+      if (code === "") {
+        console.log("No code to submit");
         return;
       }
 
@@ -47,33 +49,35 @@ function Description({
       const response = await axios.post(SUBMISSIONS_API, {
         code,
         language: languageMappings[language],
-        userId: userId,
-        problemId: problemId,
+        userId,
+        problemId,
       });
-      console.log(response);
+      console.log("Submission response received:", response);
       return response;
     } catch (error) {
-      console.log(error);
+      console.error("Error during submission:", error);
     }
   }
 
   const startDragging = (e: DragEvent<HTMLDivElement>) => {
     setIsDragging(true);
     e.preventDefault();
+    console.log("Started dragging");
   };
 
   const stopDragging = () => {
     if (isDragging) {
       setIsDragging(false);
+      console.log("Stopped dragging");
     }
   };
 
   const onDrag = (e: DragEvent<HTMLDivElement>) => {
     if (!isDragging) return;
-
     const newLeftWidth = (e.clientX / window.innerWidth) * 100;
     if (newLeftWidth > 10 && newLeftWidth < 90) {
       setLeftWidth(newLeftWidth);
+      console.log("Panel resized to:", newLeftWidth);
     }
   };
 

@@ -1,4 +1,5 @@
 function Navbar() {
+  console.log("Navbar rendered");
   return (
     <div className="navbar bg-base-100 border-b-2 h-[55px]">
       <div className="navbar-start">
@@ -6,7 +7,10 @@ function Navbar() {
           <button
             className="btn btn-ghost btn-circle"
             type="button"
-            onClick={() => document.getElementById("sidebar-drawer")?.click()}
+            onClick={() => {
+              console.log("Sidebar toggle button clicked");
+              document.getElementById("sidebar-drawer")?.click();
+            }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

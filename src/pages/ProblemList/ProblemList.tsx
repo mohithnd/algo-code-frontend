@@ -9,16 +9,20 @@ type Topic = {
 };
 
 function ProblemList() {
+  console.log("ProblemList rendered");
   return (
     <div className="flex justify-center items-center w-[100vw]">
       <div className="topic-list flex flex-col w-[60%]">
-        {SampleProblemList.map((topic: Topic) => (
-          <CollapsableTopicProblem
-            topicName={topic.topic}
-            key={topic.topicId}
-            problems={topic.problems}
-          />
-        ))}
+        {SampleProblemList.map((topic: Topic) => {
+          console.log(`Rendering topic: ${topic.topic}`);
+          return (
+            <CollapsableTopicProblem
+              topicName={topic.topic}
+              key={topic.topicId}
+              problems={topic.problems}
+            />
+          );
+        })}
       </div>
     </div>
   );

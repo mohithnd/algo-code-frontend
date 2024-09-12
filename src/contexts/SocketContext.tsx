@@ -14,28 +14,32 @@ export const SocketProvider: React.FC<IProps> = ({ children }) => {
   const [problemId, setProblemId] = useState("66ad1268f556d80850f96157");
   const [response, setResponse] = useState("");
 
-  socket.on("connect", () => {
-    console.log("Connected To The Server");
-  });
+  useEffect(() => {
+    console.log("SocketProvider mounted");
+    socket.on("connect", () => {
+      console.log("Connected to the server");
+    });
 
-  socket.on("submissionPayloadResponse", (data) => {
-    console.log("Received Submission Response:-");
-    console.log(data);
-    let result;
-    if (data.status == "Success") {
-      result = data.stdout;
-    } else {
-      result = data.stderr;
-    }
-    setResponse(result);
-  });
+    socket.on("submissionPayloadResponse", (data) => {
+      console.log("Received submission response:", data);
+      const result = data.status === "Success" ? data.stdout : data.stderr;
+      setResponse(result);
+    });
 
-  socket.on("disconnect", () => {
-    console.log("Disconnected To The Server");
-  });
+    socket.on("disconnect", () => {
+      console.log("Disconnected from the server");
+    });
+
+    return () => {
+      socket.off("connect");
+      socket.off("submissionPayloadResponse");
+      socket.off("disconnect");
+      console.log("SocketProvider unmounted");
+    };
+  }, []);
 
   useEffect(() => {
-    console.log("Sending User Id Mapping Request In Backend");
+    console.log("Sending user ID mapping request to backend:", userId);
     socket.emit("setUserId", userId);
   }, [userId]);
 
